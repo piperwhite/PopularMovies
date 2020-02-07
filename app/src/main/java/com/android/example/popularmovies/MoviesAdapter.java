@@ -24,6 +24,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesVH> {
     @Override
     public void onBindViewHolder(@NonNull MoviesVH holder, int position) {
         holder.setImage(movies.get(position).getImage());
+        holder.setOnClickListener(movies.get(position).getId());
     }
 
     public void setMovies(List<Movie> movies){

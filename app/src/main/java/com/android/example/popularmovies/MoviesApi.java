@@ -60,12 +60,15 @@ public class MoviesApi {
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
                 String jsonString  = scanner.next();
+                System.out.println(jsonString);
                 List<Movie> movies = new ArrayList<>();
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
                 for (int i = 0; i < jsonArray.length(); i++){
+                    JSONObject currentJSONObject = jsonArray.getJSONObject(i);
                     Movie movie = new Movie();
-                    movie.setImage(jsonArray.getJSONObject(i).getString("poster_path")); //TODO constant
+                    movie.setImage(currentJSONObject.getString("poster_path")); //TODO constant
+                    movie.setId(currentJSONObject.getString("id")); //TODO constant
                     movies.add(movie);
                 }
                 System.out.println(jsonString);

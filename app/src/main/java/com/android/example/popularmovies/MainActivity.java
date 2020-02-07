@@ -56,12 +56,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == R.id.action_sort_popular){
-            Toast.makeText(this, "sort popular movies", Toast.LENGTH_LONG).show();
             loadPopularMovies();
             return true;
         }
         if(itemId == R.id.action_sort_top_rated){
-            Toast.makeText(this, "sort top rated", Toast.LENGTH_LONG).show();
             loadTopRatedMovies();
             return true;
         }
