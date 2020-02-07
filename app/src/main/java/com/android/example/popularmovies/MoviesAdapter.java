@@ -26,6 +26,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesVH> {
         holder.setImage(movies.get(position).getImage());
     }
 
+    public void setMovies(List<Movie> movies){
+        this.movies = movies;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return movies.size();

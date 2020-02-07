@@ -18,7 +18,7 @@ public class MoviesVH extends RecyclerView.ViewHolder {
     }
 
     public void setImage(String url){
-        Picasso.get().load(url).into(ivPoster); //TODO handle errors network and placeholder
+        Picasso.get().load("http://image.tmdb.org/t/p/w185"+url).error(R.drawable.ic_launcher_background).into(ivPoster); //TODO handle errors network and placeholder
     }
 
 }
