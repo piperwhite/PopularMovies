@@ -23,7 +23,13 @@ public class MoviesApi {
     private final static String POPULAR_MOVIES = "/movie/popular";
     private final static String TOP_RATED = "/movie/top_rated";
     private final static String MOVIE_DETAILS= "/movie/";
-
+    private static final String RESULTS = "results";
+    private static final String POSTER_PATH = "poster_path";
+    private static final String ID = "id";
+    private static final String OVERVIEW = "overview";
+    private static final String ORIGINAL_TITLE = "original_title";
+    private static final String RELEASE_DATE = "release_date";
+    private static final String VOTE_AVERAGE = "vote_average";
 
     public static URL buildUrl(String path) {
         Uri builtUri = Uri.parse(BASE_URL + path).buildUpon() 
@@ -63,12 +69,12 @@ public class MoviesApi {
                 System.out.println(jsonString);
                 List<Movie> movies = new ArrayList<>();
                 JSONObject jsonObject = new JSONObject(jsonString);
-                JSONArray jsonArray = jsonObject.getJSONArray("results");
+                JSONArray jsonArray = jsonObject.getJSONArray(RESULTS);
                 for (int i = 0; i < jsonArray.length(); i++){
                     JSONObject currentJSONObject = jsonArray.getJSONObject(i);
                     Movie movie = new Movie();
-                    movie.setImage(currentJSONObject.getString("poster_path")); //TODO constant
-                    movie.setId(currentJSONObject.getString("id")); //TODO constant
+                    movie.setImage(currentJSONObject.getString(POSTER_PATH));
+                    movie.setId(currentJSONObject.getString(ID));
                     movies.add(movie);
                 }
                 System.out.println(jsonString);
@@ -101,8 +107,7 @@ public class MoviesApi {
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 Movie movie = new Movie();
-                movie.setId(jsonObject.getString("id")); //TODO extract method or constant
-                movie.setImage(jsonObject.getString("poster_path"));
+                setMovieData(movie, jsonObject);
                 return movie;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -111,6 +116,15 @@ public class MoviesApi {
             }
         }
         return null;
+    }
+
+    private static void setMovieData(Movie movie, JSONObject jsonObject) throws JSONException {
+        movie.setImage(jsonObject.getString(POSTER_PATH));
+        movie.setId(jsonObject.getString(ID));
+        movie.setOverview(jsonObject.getString(OVERVIEW));
+        movie.setTitle(jsonObject.getString(ORIGINAL_TITLE));
+        movie.setReleaseDate(jsonObject.getString(RELEASE_DATE));
+        movie.setVoteAverage(jsonObject.getString(VOTE_AVERAGE));
     }
 
 
