@@ -22,6 +22,7 @@ public class MoviesApi {
     private final static String BASE_URL = "http://api.themoviedb.org/3";
     private final static String POPULAR_MOVIES = "/movie/popular";
     private final static String TOP_RATED = "/movie/top_rated";
+    private final static String MOVIE_DETAILS= "/movie/";
 
 
     public static URL buildUrl(String path) {
@@ -47,7 +48,6 @@ public class MoviesApi {
     public static List<Movie> getTopRatedMovies() throws IOException {
         return getMovies(buildUrl(TOP_RATED));
     }
-
 
     private static List<Movie> getMovies(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -85,6 +85,33 @@ public class MoviesApi {
         return null;
     }
 
+
+    public static Movie getMovieDetails(String id) throws IOException {
+        URL url = buildUrl(MOVIE_DETAILS + id);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        InputStream in = urlConnection.getInputStream();
+
+        Scanner scanner = new Scanner(in);
+        scanner.useDelimiter("\\A");
+
+        boolean hasInput = scanner.hasNext();
+        if (hasInput) {
+            String jsonString = scanner.next();
+            System.out.println(jsonString);
+            try {
+                JSONObject jsonObject = new JSONObject(jsonString);
+                Movie movie = new Movie();
+                movie.setId(jsonObject.getString("id")); //TODO extract method or constant
+                movie.setImage(jsonObject.getString("poster_path"));
+                return movie;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                urlConnection.disconnect();
+            }
+        }
+        return null;
+    }
 
 
 }
