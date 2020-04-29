@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.example.popularmovies.Movie;
 import com.android.example.popularmovies.MoviesApi;
@@ -17,6 +16,8 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 public class DetailActivity extends AppCompatActivity {
+
+    public static final String EXTRA_ID = "id";
 
     private ImageView ivPoster;
     private TextView tvTitle;
@@ -36,9 +37,8 @@ public class DetailActivity extends AppCompatActivity {
         tvReleaseDate = findViewById(R.id.tv_release_date);
 
         Intent i = getIntent();
-        if(i.hasExtra("id")){
-            Toast.makeText(this, i.getStringExtra("id"), Toast.LENGTH_LONG).show();
-            new DetailMovieAsyntask().execute(i.getStringExtra("id")); //TODO Constant
+        if(i.hasExtra(EXTRA_ID)){
+            new DetailMovieAsyntask().execute(i.getStringExtra(EXTRA_ID));
         }
 
     }
@@ -67,6 +67,6 @@ public class DetailActivity extends AppCompatActivity {
         tvReleaseDate.setText(movie.getReleaseDate());
         tvAverageVote.setText(movie.getVoteAverage());
         tvOverview.setText(movie.getOverview());
-        Picasso.get().load("http://image.tmdb.org/t/p/w185"+ movie.getImage()).into(ivPoster); //TODO constant and error handle
+        Picasso.get().load(MoviesApi.IMAGE_BASE_PATH + movie.getImage()).error(R.drawable.ic_broken_image_24px).into(ivPoster);
     }
 }

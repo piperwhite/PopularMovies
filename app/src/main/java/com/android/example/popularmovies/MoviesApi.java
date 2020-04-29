@@ -20,6 +20,7 @@ public class MoviesApi {
 
     private final static String API_KEY = ""; //TODO add key
     private final static String BASE_URL = "http://api.themoviedb.org/3";
+    public final static String IMAGE_BASE_PATH = "http://image.tmdb.org/t/p/w185";
     private final static String POPULAR_MOVIES = "/movie/popular";
     private final static String TOP_RATED = "/movie/top_rated";
     private final static String MOVIE_DETAILS= "/movie/";

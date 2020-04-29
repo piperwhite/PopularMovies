@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +15,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String LAST_VISIBLE_POSITION = "lastVisiblePosition";
+    private static final String IS_POPULAR_SORT = "isPopularSort";
+    private boolean isPopularMoviesSort = true;
+    private int lastVisiblePosition = 0;
     private final int COLS = 2;
 
 
@@ -34,16 +37,15 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MoviesAdapter();
         
         rvMovies.setAdapter(adapter);
-
-        loadPopularMovies();
+        if(savedInstanceState != null){
+            lastVisiblePosition = savedInstanceState.getInt(LAST_VISIBLE_POSITION);
+            isPopularMoviesSort = savedInstanceState.getBoolean(IS_POPULAR_SORT);
+        }
+        loadMovies();
     }
 
-    private void loadPopularMovies(){
-        new MoviesAsyncTask(true).execute();
-    }
-
-    private void loadTopRatedMovies(){
-        new MoviesAsyncTask(false).execute();
+    private void loadMovies(){
+        new MoviesAsyncTask(isPopularMoviesSort).execute();
     }
 
     @Override
@@ -53,14 +55,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LAST_VISIBLE_POSITION, ((GridLayoutManager) rvMovies.getLayoutManager()).findLastVisibleItemPosition());
+        outState.putBoolean(IS_POPULAR_SORT, isPopularMoviesSort);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == R.id.action_sort_popular){
-            loadPopularMovies();
+            isPopularMoviesSort = true;
+            lastVisiblePosition = 0;
+            loadMovies();
             return true;
         }
         if(itemId == R.id.action_sort_top_rated){
-            loadTopRatedMovies();
+            isPopularMoviesSort = false;
+            lastVisiblePosition = 0;
+            loadMovies();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -92,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(List<Movie> movies) {
             if(movies != null){
                 adapter.setMovies(movies);
+                rvMovies.scrollToPosition(lastVisiblePosition);
             }
         }
     }

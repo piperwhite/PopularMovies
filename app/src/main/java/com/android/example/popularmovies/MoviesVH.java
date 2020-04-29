@@ -20,7 +20,7 @@ public class MoviesVH extends RecyclerView.ViewHolder {
     }
 
     public void setImage(String url){
-        Picasso.get().load("http://image.tmdb.org/t/p/w185"+url).error(R.drawable.ic_launcher_background).into(ivPoster); //TODO handle errors network and placeholder
+        Picasso.get().load(MoviesApi.IMAGE_BASE_PATH + url).error(R.drawable.ic_broken_image_24px).into(ivPoster);
     }
 
     public void setOnClickListener(final String id) {
@@ -28,7 +28,7 @@ public class MoviesVH extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(itemView.getContext(), DetailActivity.class);
-                i.putExtra("id", id);
+                i.putExtra(DetailActivity.EXTRA_ID, id);
                 itemView.getContext().startActivity(i);
             }
         });
